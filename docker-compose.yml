@@ -1,0 +1,35 @@
+version: "3.7"
+
+services:
+  mc:
+    # FTBA support is only available in multiarch image tag
+    image: itzg/minecraft-server:multiarch
+    ports:
+      # expose the Minecraft server port outside of container
+      - 25565:25565
+    environment:
+      # REQUIRED for all types
+      EULA: "TRUE"
+      # Set server type (vs the default of vanilla)
+      TYPE: FTBA
+      FTB_MODPACK_ID: "31" # Direwolf 1.12
+      FTB_MODPACK_VERSION_ID: "144" # 2.8.0
+      MOTD: "Modded Server running FTB Direwolf20 1.12 modpack version 2.8.0"
+      OVERRIDE_SERVER_PROPERTIES: "TRUE"
+      MEMORY: "3G"
+      ONLINE_MODE: "false"
+      JVM_DD_OPTS: "fml.readTimeout:90"
+      MAX_TICK_TIME: "-1"
+      OPS: "Kevin"
+      ENABLE_RCON: "TRUE"
+      RCON_PASSWORD: "zoo some bare space"
+      #MODS: "https://mc1-mods.s3-us-west-2.amazonaws.com/TickCentral-2.6.jar,https://mc1-mods.s3-us-west-2.amazonaws.com/LagGoggles-1.12.2-5.8-132.jar"
+    volumes:
+      # use a named, managed volume for data volume
+      - mc_ftb:/data
+    restart: always
+    # entrypoint: ["tail", "-f", "/dev/null"]
+
+volumes:
+  # declared the named volume, but use default/local storage engine
+  mc_ftb:
